@@ -1,0 +1,139 @@
+{
+  "jobs": [
+    {
+      "id": 1001,
+      "title": "Frontend Engineer Intern",
+      "company_name": "GoTo Financial",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Hybrid)",
+      "salary": "Rp 4.500.000",
+      "tags": ["React", "TypeScript", "CSS", "Git"]
+    },
+    {
+      "id": 1002,
+      "title": "Full-Stack Software Engineer Intern",
+      "company_name": "Traveloka",
+      "category": "Software Development",
+      "candidate_required_location": "Tangerang (Hybrid)",
+      "salary": "Rp 5.000.000",
+      "tags": ["React", "TypeScript", "Node.js", "PostgreSQL", "Docker"]
+    },
+    {
+      "id": 1003,
+      "title": "Web Platform Engineer Intern",
+      "company_name": "Bibit.id",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Remote)",
+      "salary": "Rp 4.500.000",
+      "tags": ["React", "TypeScript", "CSS", "Next.js", "Tailwind CSS"]
+    },
+    {
+      "id": 1004,
+      "title": "DevOps & Cloud Infrastructure Intern",
+      "company_name": "Xendit",
+      "category": "DevOps / Sysadmin",
+      "candidate_required_location": "Jakarta (Remote)",
+      "salary": "Rp 5.500.000",
+      "tags": ["Linux", "Docker", "Kubernetes", "AWS", "CI/CD"]
+    },
+    {
+      "id": 1005,
+      "title": "Backend Engineer Intern",
+      "company_name": "Bank Jago",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Hybrid)",
+      "salary": "Rp 4.800.000",
+      "tags": ["Go", "PostgreSQL", "REST API", "Docker", "Git"]
+    },
+    {
+      "id": 1006,
+      "title": "Frontend Web Developer Intern",
+      "company_name": "Ruangguru",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Remote)",
+      "salary": "Rp 3.500.000",
+      "tags": ["React", "JavaScript", "CSS", "HTML"]
+    },
+    {
+      "id": 1007,
+      "title": "Data Analyst & Engineering Intern",
+      "company_name": "Shopee Indonesia",
+      "category": "Data",
+      "candidate_required_location": "Jakarta (Onsite)",
+      "salary": "Rp 4.500.000",
+      "tags": ["Python", "SQL", "PostgreSQL", "BigQuery"]
+    },
+    {
+      "id": 1008,
+      "title": "Software Engineer Intern — Frontend",
+      "company_name": "Blibli",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Hybrid)",
+      "salary": "Rp 4.200.000",
+      "tags": ["React", "TypeScript", "CSS"]
+    },
+    {
+      "id": 1009,
+      "title": "Backend & API Developer Intern",
+      "company_name": "Mekari",
+      "category": "Software Development",
+      "candidate_required_location": "Surabaya (Hybrid)",
+      "salary": "Rp 3.500.000",
+      "tags": ["TypeScript", "Node.js", "MySQL", "REST API", "Docker"]
+    },
+    {
+      "id": 1010,
+      "title": "Quality Assurance (QA) Automation Intern",
+      "company_name": "Tiket.com",
+      "category": "QA",
+      "candidate_required_location": "Jakarta (Hybrid)",
+      "salary": "Rp 4.000.000",
+      "tags": ["JavaScript", "TypeScript", "Playwright", "Git"]
+    },
+    {
+      "id": 1011,
+      "title": "UI/UX Design & Prototyping Intern",
+      "company_name": "Halodoc",
+      "category": "Design",
+      "candidate_required_location": "Jakarta (Remote)",
+      "salary": "Rp 3.800.000",
+      "tags": ["Figma", "Design System", "HTML", "CSS"]
+    },
+    {
+      "id": 1012,
+      "title": "Information Security & SOC Intern",
+      "company_name": "DANA Indonesia",
+      "category": "DevOps / Sysadmin",
+      "candidate_required_location": "Jakarta (Onsite)",
+      "salary": "Rp 4.500.000",
+      "tags": ["Linux", "Networking", "Python", "Docker"]
+    },
+    {
+      "id": 1013,
+      "title": "Frontend Engineer Intern (React)",
+      "company_name": "Flip",
+      "category": "Software Development",
+      "candidate_required_location": "Depok (Remote)",
+      "salary": "Rp 4.000.000",
+      "tags": ["React", "TypeScript", "REST API", "Git"]
+    },
+    {
+      "id": 1014,
+      "title": "Software Engineer Intern — Core Payments",
+      "company_name": "Midtrans",
+      "category": "Software Development",
+      "candidate_required_location": "Jakarta (Hybrid)",
+      "salary": "Rp 4.700.000",
+      "tags": ["TypeScript", "Node.js", "PostgreSQL", "Docker"]
+    },
+    {
+      "id": 1015,
+      "title": "Web Frontend Intern",
+      "company_name": "Bukalapak",
+      "category": "Software Development",
+      "candidate_required_location": "Bandung (Remote)",
+      "salary": "Rp 3.800.000",
+      "tags": ["React", "TypeScript", "CSS", "Git"]
+    }
+  ]
+}
