@@ -6,6 +6,12 @@ import { findInterviewConflicts } from "./utils/conflictUtils";
 import { shiftDateBackwardDays } from "./utils/ghostingUtils";
 import { WarRoomPipeline } from "./components/WarRoomPipeline";
 import { UndoToast } from "./components/UndoToast";
+import { JobExplorer } from "./components/JobExplorer";
+import { SkillProfileSidebar } from "./components/SkillProfileSidebar";
+import { ManualApplicationModal } from "./components/ManualApplicationModal";
+import { hasDuplicateApplication } from "./utils/skillMatchUtils";
+import type { JobListing, WorkMode } from "./types";
+import type { JobDataSource } from "./services/jobService";
 
 type ActiveTab = "explorer" | "pipeline" | "comparator";
 
@@ -39,6 +45,7 @@ export function App() {
 
   const [activeTab, setActiveTab] = useState<ActiveTab>("pipeline");
   const [isManualModalOpen, setIsManualModalOpen] = useState<boolean>(false);
+  const [jobSource, setJobSource] = useState<JobDataSource>("live");
   const [selectedApplicationId, setSelectedApplicationId] = useState<
     string | null
   >(null);
@@ -63,8 +70,49 @@ export function App() {
   const selectedApplication =
     applications.find((app) => app.id === selectedApplicationId) ?? null;
 
-  const handleAddApplication = (newApp: Application) => {
+  const handleAddApplication = (newApp: Application): boolean => {
+    if (hasDuplicateApplication(applications, newApp.company, newApp.role)) {
+      return false;
+    }
     setApplications((prev) => [newApp, ...prev]);
+    return true;
+  };
+
+  const handleSaveJob = (job: JobListing) => {
+    const now = new Date().toISOString();
+    const location = job.candidate_required_location.toLocaleLowerCase();
+    const workMode: WorkMode = location.includes("remote")
+      ? "Remote"
+      : location.includes("hybrid")
+        ? "Hybrid"
+        : "Onsite";
+    handleAddApplication({
+      id: crypto.randomUUID(),
+      company: job.company_name,
+      role: job.title,
+      workMode,
+      status: "WISHLIST",
+      requiredSkills: [...job.tags],
+      lastUpdatedAt: now,
+      checklist: [],
+      activityLogs: [{
+        id: crypto.randomUUID(),
+        timestamp: now,
+        message: "Disimpan ke Wishlist dari Eksplorasi Lowongan.",
+      }],
+    });
+  };
+
+  const handleAddSkill = (skill: string): boolean => {
+    if (kaptenSkills.some((item) => item.trim().toLocaleLowerCase() === skill.trim().toLocaleLowerCase())) {
+      return false;
+    }
+    setKaptenSkills((prev) => [...prev, skill.trim()]);
+    return true;
+  };
+
+  const handleRemoveSkill = (skill: string) => {
+    setKaptenSkills((prev) => prev.filter((item) => item !== skill));
   };
 
   const handleUpdateApplication = (updatedApp: Application) => {
@@ -205,20 +253,22 @@ export function App() {
         {/* Slot Anggota 3: <StatsDashboard applications={applications} /> */}
 
         {activeTab === "explorer" && (
-          <section className="panel">
-            <h2>Eksplorasi Lowongan &amp; Profil Skill Kapten</h2>
-            <p className="muted-text">
-              Slot komponen Anggota 2 (SkillProfileSidebar &amp; JobExplorer).
-              Skill aktif saat ini: {kaptenSkills.join(", ")}.
-            </p>
-            <button
-              type="button"
-              className="btn-secondary"
-              onClick={() => setKaptenSkills((prev) => prev)}
-            >
-              Sinkronisasi Profil Skill ({kaptenSkills.length} skill)
-            </button>
-          </section>
+          <div className="explorer-layout">
+            <SkillProfileSidebar
+              skills={kaptenSkills}
+              onAddSkill={handleAddSkill}
+              onRemoveSkill={handleRemoveSkill}
+              source={jobSource}
+              onSourceChange={setJobSource}
+            />
+            <JobExplorer
+              applications={applications}
+              kaptenSkills={kaptenSkills}
+              source={jobSource}
+              onSourceChange={setJobSource}
+              onSaveJob={handleSaveJob}
+            />
+          </div>
         )}
 
         {activeTab === "pipeline" && (
@@ -243,50 +293,11 @@ export function App() {
         )}
 
         {isManualModalOpen && (
-          <div className="modal-backdrop">
-            <div className="modal-card">
-              <h3>Form Tambah Lamaran Manual (Slot Anggota 2)</h3>
-              <p className="muted-text">
-                Anggota 2 akan mengganti modal ini dengan ManualApplicationModal
-                dan memanggil handleAddApplication.
-              </p>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() => setIsManualModalOpen(false)}
-                >
-                  Tutup
-                </button>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => {
-                    handleAddApplication({
-                      id: crypto.randomUUID(),
-                      company: "GoTo Financial",
-                      role: "Frontend Engineer Intern",
-                      workMode: "Hybrid",
-                      status: "WISHLIST",
-                      requiredSkills: ["React", "TypeScript", "CSS", "Git"],
-                      lastUpdatedAt: new Date().toISOString(),
-                      checklist: [],
-                      activityLogs: [
-                        {
-                          id: crypto.randomUUID(),
-                          timestamp: new Date().toISOString(),
-                          message: "Disimpan ke Wishlist",
-                        },
-                      ],
-                    });
-                    setIsManualModalOpen(false);
-                  }}
-                >
-                  Tambah Contoh Lamaran
-                </button>
-              </div>
-            </div>
-          </div>
+          <ManualApplicationModal
+            applications={applications}
+            onSubmit={handleAddApplication}
+            onClose={() => setIsManualModalOpen(false)}
+          />
         )}
 
         {selectedApplication && (
@@ -329,6 +340,7 @@ export function App() {
 
       {deletedBackup && (
         <UndoToast
+          key={deletedBackup.app.id}
           company={deletedBackup.app.company}
           onUndo={handleUndoDelete}
           onDismiss={handleDismissToast}

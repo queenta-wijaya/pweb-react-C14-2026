@@ -583,3 +583,385 @@ button {
 .btn-icon-subtle:hover {
   color: #ffffff;
 }
+
+/* ===== JOB EXPLORER & SKILL PROFILE ===== */
+.explorer-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.72fr) minmax(0, 2fr);
+  align-items: start;
+  gap: 1.1rem;
+}
+
+.skill-sidebar {
+  padding: 1.15rem;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.explorer-section-heading h3,
+.job-card h3,
+.explorer-error h3 {
+  margin: 0.2rem 0 0;
+  font-size: 1rem;
+}
+
+.eyebrow {
+  color: var(--burgundy);
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.skill-add-form {
+  display: flex;
+  gap: 0.45rem;
+  margin: 1rem 0 0.55rem;
+}
+
+.skill-add-form input,
+.manual-application-form input,
+.manual-application-form select,
+.explorer-source-control select {
+  min-width: 0;
+  width: 100%;
+  padding: 0.58rem 0.68rem;
+  border: 1.5px solid #a1a1aa;
+  border-radius: 8px;
+  color: var(--ink);
+  background: #ffffff;
+  font: inherit;
+}
+
+.skill-add-form .btn-primary {
+  padding: 0.5rem;
+}
+
+.skill-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.8rem;
+}
+
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem 0.4rem 0.25rem 0.65rem;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  background: var(--surface-alt);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.skill-chip button {
+  display: inline-flex;
+  padding: 0.15rem;
+  border: 0;
+  border-radius: 50%;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+}
+
+.skill-chip button:hover {
+  color: var(--danger);
+  background: var(--danger-bg);
+}
+
+.explorer-source-control {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.35rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #d4d4d8;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.job-explorer-panel {
+  min-width: 0;
+}
+
+.job-explorer-panel .panel-header {
+  align-items: center;
+}
+
+.job-explorer-panel .panel-header h2 {
+  margin: 0.15rem 0;
+}
+
+.source-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.55rem;
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  background: var(--surface-alt);
+  font-family: var(--font-mono);
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.source-live {
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+.job-explorer-panel kbd {
+  padding: 0.05rem 0.32rem;
+  border: 1px solid #a1a1aa;
+  border-radius: 4px;
+  color: var(--ink);
+  background: #ffffff;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.job-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.95rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 11px;
+  background: #ffffff;
+}
+
+.job-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.job-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+
+.job-card-heading h3 {
+  margin: 0.15rem 0;
+  font-size: 0.95rem;
+}
+
+.job-company {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.job-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.job-skill-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+}
+
+.skill-group-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--muted);
+  font-size: 0.67rem;
+  font-weight: 800;
+}
+
+.job-skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.job-skill {
+  padding: 0.12rem 0.4rem;
+  border-radius: 5px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.job-skill.matched {
+  color: var(--success);
+  background: var(--success-bg);
+}
+
+.job-skill.missing {
+  color: var(--warning);
+  background: var(--warning-bg);
+}
+
+.job-card > button {
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.job-card > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.68;
+  box-shadow: none;
+}
+
+.explorer-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1.2rem;
+  border: 2px solid var(--danger);
+  border-radius: 11px;
+  color: #991b1b;
+  background: var(--danger-bg);
+}
+
+.explorer-error p {
+  margin: 0.25rem 0 0.8rem;
+  font-size: 0.85rem;
+}
+
+.explorer-error-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.loading-indicator {
+  width: 1.6rem;
+  height: 1.6rem;
+  margin: 0 auto;
+  border: 3px solid #e4e4e7;
+  border-top-color: var(--burgundy);
+  border-radius: 50%;
+  animation: loading-spin 0.8s linear infinite;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===== MANUAL APPLICATION FORM ===== */
+.manual-application-modal {
+  max-width: 600px;
+  max-height: min(90vh, 760px);
+  overflow: auto;
+}
+
+.modal-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.modal-title-row h2 {
+  margin: 0.15rem 0 0;
+  font-size: 1.2rem;
+}
+
+.modal-close-button {
+  color: var(--muted);
+}
+
+.modal-close-button:hover {
+  color: var(--ink);
+}
+
+.manual-application-form,
+.manual-application-form label {
+  display: flex;
+  flex-direction: column;
+}
+
+.manual-application-form {
+  gap: 0.8rem;
+}
+
+.manual-application-form label {
+  gap: 0.3rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.manual-application-form label .muted-text {
+  display: inline;
+  font-weight: 400;
+}
+
+.manual-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.manual-application-form input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.form-error {
+  color: var(--danger);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 760px) {
+  .explorer-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .job-card {
+    flex-direction: column;
+  }
+
+  .job-card > button {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .manual-form-row,
+  .job-skill-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .job-card-heading {
+    flex-direction: column-reverse;
+  }
+}

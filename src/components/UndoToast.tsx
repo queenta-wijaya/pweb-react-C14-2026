@@ -11,7 +11,6 @@ export function UndoToast({ company, onUndo, onDismiss }: UndoToastProps) {
   const [secondsLeft, setSecondsLeft] = useState<number>(5);
 
   useEffect(() => {
-    setSecondsLeft(5);
     const intervalId = window.setInterval(() => {
       setSecondsLeft((prev) => (prev > 1 ? prev - 1 : 0));
     }, 1000);
@@ -19,7 +18,7 @@ export function UndoToast({ company, onUndo, onDismiss }: UndoToastProps) {
     return () => {
       window.clearInterval(intervalId);
     };
-  }, [company]);
+  }, []);
 
   return (
     <div className="undo-toast" role="status" aria-live="polite">

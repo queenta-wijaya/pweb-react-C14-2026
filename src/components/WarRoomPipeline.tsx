@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { Application, ApplicationStatus } from "../types";
 import { isRawanGhosting } from "../utils/ghostingUtils";
+import { getSkillMatch } from "../utils/skillMatchUtils";
 
 type StatusFilter = "ALL" | ApplicationStatus;
 type SortOption = "newest" | "interview" | "offer";
@@ -33,18 +34,6 @@ const STATUS_OPTIONS: StatusFilter[] = [
   "REJECTED",
   "GHOSTED",
 ];
-
-function computeMatchScore(
-  requiredSkills: string[],
-  kaptenSkills: string[]
-): number {
-  if (requiredSkills.length === 0) return 100;
-  const ownedSet = new Set(kaptenSkills.map((s) => s.trim().toLowerCase()));
-  const matchedCount = requiredSkills.filter((skill) =>
-    ownedSet.has(skill.trim().toLowerCase())
-  ).length;
-  return Math.round((matchedCount / requiredSkills.length) * 100);
-}
 
 function getMatchBadgeClass(score: number): string {
   if (score >= 70) return "badge-green";
@@ -188,10 +177,10 @@ export function WarRoomPipeline({
       ) : (
         <div className="pipeline-list">
           {filteredApplications.map((app) => {
-            const matchScore = computeMatchScore(
+            const matchScore = getSkillMatch(
               app.requiredSkills,
               kaptenSkills
-            );
+            ).score;
             const ghosting = isRawanGhosting(app);
             const doneCount = app.checklist.filter((item) => item.done).length;
             const totalChecklist = app.checklist.length;
