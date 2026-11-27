@@ -33,13 +33,20 @@ export function OfferComparator({
 
   if (offerApplications.length < 2) {
     return (
-      <section aria-label="Bandingkan Offer Magang">
-        <h2>Bandingkan Offer Magang</h2>
-        <p>
-          Belum cukup offer untuk dibandingkan. Minimal dibutuhkan 2 lamaran
-          berstatus <strong>OFFER</strong> (saat ini baru tersedia{" "}
-          {offerApplications.length} offer).
-        </p>
+      <section className="panel offer-comparator" aria-label="Bandingkan Offer Magang">
+        <div className="panel-header">
+          <div>
+            <span className="eyebrow">AMBIL KEPUTUSAN</span>
+            <h2>Bandingkan Offer Magang</h2>
+          </div>
+        </div>
+        <div className="empty-state offer-empty-state">
+          <h3>Belum cukup offer untuk dibandingkan</h3>
+          <p>
+            Minimal dibutuhkan 2 lamaran berstatus <strong>OFFER</strong>.
+            Saat ini tersedia {offerApplications.length} offer.
+          </p>
+        </div>
       </section>
     );
   }
@@ -81,19 +88,20 @@ export function OfferComparator({
   const isBBest = evalB.totalScore > evalA.totalScore;
 
   return (
-    <section aria-label="Bandingkan Offer Magang">
-      <div>
+    <section className="panel offer-comparator" aria-label="Bandingkan Offer Magang">
+      <div className="panel-header offer-comparator-header">
         <div>
+          <span className="eyebrow">AMBIL KEPUTUSAN</span>
           <h2>Bandingkan Offer Magang</h2>
-          <p>
+          <p className="muted-text">
             Bobot penilaian: Uang Saku 50% &bull; Mode Kerja 25% &bull;
             Kecocokan Skill 25%
           </p>
         </div>
 
-        <div>
-          <label>
-            Offer A:{" "}
+        <div className="offer-selectors">
+          <label className="offer-select">
+            <span>Offer A</span>
             <select
               value={offerA.id}
               onChange={(e) => setSelectedOfferAId(e.target.value)}
@@ -106,10 +114,10 @@ export function OfferComparator({
             </select>
           </label>
 
-          <span> vs </span>
+          <span className="offer-versus">VS</span>
 
-          <label>
-            Offer B:{" "}
+          <label className="offer-select">
+            <span>Offer B</span>
             <select
               value={offerB.id}
               onChange={(e) => setSelectedOfferBId(e.target.value)}
@@ -124,80 +132,82 @@ export function OfferComparator({
         </div>
       </div>
 
-      <div>
-        {/* Kartu Offer A */}
-        <article>
-          <div>
+      <div className="offer-comparison-grid">
+        <article className={`offer-card${isABest ? " offer-card-recommended" : ""}`}>
+          <div className="offer-card-heading">
             <div>
+              <span className="offer-card-label">PILIHAN A</span>
               <h3>{offerA.company}</h3>
               <p>{offerA.role}</p>
             </div>
-            {isABest && <span>Rekomendasi Terbaik</span>}
+            {isABest && <span className="recommendation-badge">Rekomendasi Terbaik</span>}
           </div>
 
-          <div>
-            <p>
-              Uang Saku / Bulan: <strong>{formatRupiah(evalA.salaryOffer)}</strong>{" "}
-              ({evalA.weightedSalaryPart.toFixed(1)} / 50)
+          <div className="offer-metrics">
+            <p className="offer-metric">
+              <span>Uang saku / bulan</span>
+              <strong>{formatRupiah(evalA.salaryOffer)}</strong>
+              <small>{evalA.weightedSalaryPart.toFixed(1)} / 50 poin</small>
             </p>
-            <p>
-              Mode Kerja:{" "}
+            <p className="offer-metric">
+              <span>Mode kerja</span>
               <strong>
                 {offerA.workMode} ({getWorkModeScore(offerA.workMode)})
               </strong>{" "}
-              ({evalA.weightedWorkModePart.toFixed(1)} / 25)
+              <small>{evalA.weightedWorkModePart.toFixed(1)} / 25 poin</small>
             </p>
-            <p>
-              Kecocokan Skill:{" "}
+            <p className="offer-metric">
+              <span>Kecocokan skill</span>
               <strong>
                 {matchA.score}% ({matchA.matchedSkills.length} dari{" "}
                 {offerA.requiredSkills.length} skill)
               </strong>{" "}
-              ({evalA.weightedSkillMatchPart.toFixed(1)} / 25)
+              <small>{evalA.weightedSkillMatchPart.toFixed(1)} / 25 poin</small>
             </p>
           </div>
 
-          <div>
+          <div className="offer-total-score">
             <p>TOTAL SKOR BERBOBOT</p>
-            <p>{evalA.totalScore.toFixed(1)}</p>
+            <strong>{evalA.totalScore.toFixed(1)}<small> / 100</small></strong>
           </div>
         </article>
 
-        {/* Kartu Offer B */}
-        <article>
-          <div>
+        <article className={`offer-card${isBBest ? " offer-card-recommended" : ""}`}>
+          <div className="offer-card-heading">
             <div>
+              <span className="offer-card-label">PILIHAN B</span>
               <h3>{offerB.company}</h3>
               <p>{offerB.role}</p>
             </div>
-            {isBBest && <span>Rekomendasi Terbaik</span>}
+            {isBBest && <span className="recommendation-badge">Rekomendasi Terbaik</span>}
           </div>
 
-          <div>
-            <p>
-              Uang Saku / Bulan: <strong>{formatRupiah(evalB.salaryOffer)}</strong>{" "}
-              ({evalB.weightedSalaryPart.toFixed(1)} / 50)
+          <div className="offer-metrics">
+            <p className="offer-metric">
+              <span>Uang saku / bulan</span>
+              <strong>{formatRupiah(evalB.salaryOffer)}</strong>
+              <small>{evalB.weightedSalaryPart.toFixed(1)} / 50 poin</small>
             </p>
-            <p>
-              Mode Kerja:{" "}
+            <p className="offer-metric">
+              <span>Mode kerja</span>
               <strong>
                 {offerB.workMode} ({getWorkModeScore(offerB.workMode)})
               </strong>{" "}
-              ({evalB.weightedWorkModePart.toFixed(1)} / 25)
+              <small>{evalB.weightedWorkModePart.toFixed(1)} / 25 poin</small>
             </p>
-            <p>
-              Kecocokan Skill:{" "}
+            <p className="offer-metric">
+              <span>Kecocokan skill</span>
               <strong>
                 {matchB.score}% ({matchB.matchedSkills.length} dari{" "}
                 {offerB.requiredSkills.length} skill)
               </strong>{" "}
-              ({evalB.weightedSkillMatchPart.toFixed(1)} / 25)
+              <small>{evalB.weightedSkillMatchPart.toFixed(1)} / 25 poin</small>
             </p>
           </div>
 
-          <div>
+          <div className="offer-total-score">
             <p>TOTAL SKOR BERBOBOT</p>
-            <p>{evalB.totalScore.toFixed(1)}</p>
+            <strong>{evalB.totalScore.toFixed(1)}<small> / 100</small></strong>
           </div>
         </article>
       </div>

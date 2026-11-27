@@ -74,35 +74,45 @@ export function InterviewPrepTimer({
   const currentQuestion = INTERVIEW_QUESTIONS[questionIndex];
 
   return (
-    <section aria-label="Latihan Interview">
-      <div>
+    <section className="interview-timer" aria-label="Latihan Interview">
+      <div className="interview-timer-header">
         <div>
-          <p>LATIHAN INTERVIEW</p>
+          <span className="eyebrow">LATIHAN INTERVIEW</span>
           {(role || company) && (
-            <p>
+            <p className="interview-timer-context">
               {role ?? "Posisi Magang"}
               {company ? ` — ${company}` : ""}
             </p>
           )}
         </div>
-        <span>
+        <span className="interview-question-count">
           Soal {questionIndex + 1} / {INTERVIEW_QUESTIONS.length}
         </span>
       </div>
 
-      <p>“{currentQuestion}”</p>
+      <p className="interview-question">“{currentQuestion}”</p>
 
-      <div>
-        <span aria-live="polite">{formatCountdown(secondsLeft)}</span>
+      <div className="interview-timer-controls">
+        <span className="interview-countdown" aria-live="polite">
+          {formatCountdown(secondsLeft)}
+        </span>
 
-        <div>
-          <button type="button" onClick={handleToggleStartPause}>
+        <div className="interview-timer-buttons">
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={handleToggleStartPause}
+          >
             {isRunning ? "Jeda" : "Mulai"}
           </button>
-          <button type="button" onClick={handleReset}>
+          <button type="button" className="btn-secondary" onClick={handleReset}>
             Reset
           </button>
-          <button type="button" onClick={handleNextQuestion}>
+          <button
+            type="button"
+            className="btn-secondary"
+            onClick={handleNextQuestion}
+          >
             Soal Berikutnya
           </button>
         </div>

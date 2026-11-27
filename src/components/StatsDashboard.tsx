@@ -41,29 +41,32 @@ export function StatsDashboard({
   const interviewRateText = formatPercent(interviewCount, totalApplications);
 
   return (
-    <section aria-label="Dashboard Statistik Lamaran">
-      <div>
-        <div>
-          <p>TOTAL LAMARAN</p>
-          <p>{totalApplications}</p>
-          <p>{processedCount} sudah diproses</p>
-        </div>
+    <section className="stats-dashboard" aria-label="Dashboard Statistik Lamaran">
+      <div className="stats-grid">
+        <article className="stats-card">
+          <p className="stats-label">TOTAL LAMARAN</p>
+          <p className="stats-value">{totalApplications}</p>
+          <p className="stats-caption">{processedCount} sudah diproses</p>
+        </article>
 
-        <div>
-          <p>RESPONSE RATE</p>
-          <p>{responseRateText}</p>
-          <p>
+        <article className="stats-card">
+          <p className="stats-label">RESPONSE RATE</p>
+          <p className="stats-value">{responseRateText}</p>
+          <p className="stats-caption">
             {processedCount} dari {totalApplications} lamaran
           </p>
-        </div>
+        </article>
 
-        <div>
-          <p>INTERVIEW RATE</p>
-          <p>{interviewRateText}</p>
-          <p>{interviewCount} masuk tahap interview/offer</p>
-        </div>
+        <article className="stats-card">
+          <p className="stats-label">INTERVIEW RATE</p>
+          <p className="stats-value">{interviewRateText}</p>
+          <p className="stats-caption">
+            {interviewCount} masuk tahap interview/offer
+          </p>
+        </article>
 
-        <div
+        <article
+          className={`stats-card stats-card-ghosting${onToggleGhostingOnly ? " stats-card-interactive" : ""}`}
           role={onToggleGhostingOnly ? "button" : undefined}
           tabIndex={onToggleGhostingOnly ? 0 : undefined}
           onClick={onToggleGhostingOnly}
@@ -74,12 +77,13 @@ export function StatsDashboard({
             }
           }}
         >
-          <p>RAWAN GHOSTING</p>
-          <p>{ghostingCount}</p>
-          <p>&gt; 14 hari tanpa kabar</p>
-        </div>
+          <p className="stats-label">RAWAN GHOSTING</p>
+          <p className="stats-value">{ghostingCount}</p>
+          <p className="stats-caption">&gt; 14 hari tanpa kabar</p>
+        </article>
 
-        <div
+        <article
+          className={`stats-card stats-card-offers${onSelectFilterStatus ? " stats-card-interactive" : ""}`}
           role={onSelectFilterStatus ? "button" : undefined}
           tabIndex={onSelectFilterStatus ? 0 : undefined}
           onClick={() => onSelectFilterStatus?.("OFFER")}
@@ -93,14 +97,14 @@ export function StatsDashboard({
             }
           }}
         >
-          <p>TOTAL OFFER</p>
-          <p>{offerCount}</p>
-          <p>
+          <p className="stats-label">TOTAL OFFER</p>
+          <p className="stats-value">{offerCount}</p>
+          <p className="stats-caption">
             {offerCount >= 2
               ? "Siap dibandingkan"
               : "Minimal 2 offer untuk bandingkan"}
           </p>
-        </div>
+        </article>
       </div>
     </section>
   );

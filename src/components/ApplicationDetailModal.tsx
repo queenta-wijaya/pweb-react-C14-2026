@@ -201,34 +201,53 @@ export function ApplicationDetailModal({
   };
 
   return (
-    <div role="dialog" aria-modal="true" aria-label="Detail Lamaran">
-      <div>
-        {/* Header Detail Lamaran */}
-        <header>
-          <div>
-            <h2>
+    <div
+      className="modal-backdrop application-detail-backdrop"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        className="modal-card application-detail-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="application-detail-title"
+      >
+        <header className="application-detail-header">
+          <div className="application-detail-heading">
+            <span className="eyebrow">WAR ROOM LAMARAN</span>
+            <h2 id="application-detail-title">
               {application.role} — {application.company}
             </h2>
-            <p>
-              Mode: {application.workMode} • Status:{" "}
-              <strong>{application.status}</strong>
+            <div className="application-detail-meta">
+              <span>{application.workMode}</span>
+              <span className={`status-pill status-${application.status.toLowerCase()}`}>
+                {application.status}
+              </span>
               {application.cvVersion ? ` • CV: ${application.cvVersion}` : ""}
-              {application.interviewDateTime
-                ? ` • Jadwal Interview: ${application.interviewDateTime.replace("T", " ")}`
-                : ""}
-            </p>
+              {application.interviewDateTime && (
+                <span>
+                  Jadwal interview: {application.interviewDateTime.replace("T", " ")}
+                </span>
+              )}
+            </div>
           </div>
 
-          <div>
+          <div className="application-detail-actions">
             {(application.status === "APPLIED" ||
               application.status === "SCREENING") && (
-              <button type="button" onClick={handleSimulate15Days}>
+              <button
+                type="button"
+                className="btn-secondary"
+                onClick={handleSimulate15Days}
+              >
                 Simulasi +15 Hari
               </button>
             )}
             {onDeleteApplication && (
               <button
                 type="button"
+                className="btn-danger"
                 onClick={() => {
                   onDeleteApplication(application.id);
                   onClose();
@@ -237,29 +256,39 @@ export function ApplicationDetailModal({
                 Hapus
               </button>
             )}
-            <button type="button" onClick={onClose}>
+            <button type="button" className="btn-secondary" onClick={onClose}>
               Tutup
             </button>
           </div>
         </header>
 
-        {/* Bagian 1: Tahap Seleksi (State Machine) */}
-        <section aria-label="Tahap Seleksi">
-          <h3>Tahap Seleksi</h3>
+        <section className="detail-section" aria-label="Tahap Seleksi">
+          <div className="detail-section-heading">
+            <div>
+              <span className="eyebrow">STATUS</span>
+              <h3>Tahap Seleksi</h3>
+            </div>
+            <p className="muted-text">Perpindahan mengikuti state machine lamaran.</p>
+          </div>
 
           {isTerminalStatus(application.status) ? (
-            <p>
+            <p className="detail-terminal-message">
               Status saat ini adalah <strong>{application.status}</strong>{" "}
               (final, tidak dapat berpindah status lagi).
             </p>
           ) : (
-            <form onSubmit={handleConfirmTransition}>
-              <div>
-                <span>Pindahkan status ke: </span>
+            <form
+              className="transition-form"
+              onSubmit={handleConfirmTransition}
+              noValidate
+            >
+              <div className="transition-options">
+                <span className="transition-label">Pindahkan status ke:</span>
                 {allowedNextStatuses.map((statusOption) => (
                   <button
                     key={statusOption}
                     type="button"
+                    className={`transition-choice${targetStatus === statusOption ? " selected" : ""}`}
                     aria-pressed={targetStatus === statusOption}
                     onClick={() => {
                       setTargetStatus(statusOption);
@@ -272,11 +301,12 @@ export function ApplicationDetailModal({
               </div>
 
               {targetStatus === "APPLIED" && (
-                <div>
+                <div className="transition-fields">
                   <label>
                     Versi CV:{" "}
                     <input
                       type="text"
+                      className="detail-input"
                       placeholder="Contoh: Kapten-CV-v2.pdf"
                       value={cvVersion}
                       onChange={(e) => setCvVersion(e.target.value)}
@@ -286,6 +316,7 @@ export function ApplicationDetailModal({
                     Tanggal Melamar:{" "}
                     <input
                       type="date"
+                      className="detail-input"
                       value={appliedDate}
                       onChange={(e) => setAppliedDate(e.target.value)}
                     />
@@ -294,11 +325,12 @@ export function ApplicationDetailModal({
               )}
 
               {targetStatus === "INTERVIEW" && (
-                <div>
+                <div className="transition-fields">
                   <label>
                     Jadwal Interview:{" "}
                     <input
                       type="datetime-local"
+                      className="detail-input"
                       value={interviewDateTime}
                       onChange={(e) => setInterviewDateTime(e.target.value)}
                     />
@@ -307,11 +339,12 @@ export function ApplicationDetailModal({
               )}
 
               {targetStatus === "OFFER" && (
-                <div>
+                <div className="transition-fields">
                   <label>
                     Uang Saku / Gaji (Rp):{" "}
                     <input
                       type="number"
+                      className="detail-input"
                       min={1}
                       placeholder="Contoh: 5500000"
                       value={salaryOfferInput}
@@ -321,6 +354,7 @@ export function ApplicationDetailModal({
                   <label>
                     Mode Kerja:{" "}
                     <select
+                      className="detail-input"
                       value={offerWorkMode}
                       onChange={(e) =>
                         setOfferWorkMode(e.target.value as WorkMode)
@@ -334,26 +368,37 @@ export function ApplicationDetailModal({
                 </div>
               )}
 
-              {transitionError && <p role="alert">{transitionError}</p>}
+              {transitionError && (
+                <p className="form-error detail-transition-error" role="alert">
+                  {transitionError}
+                </p>
+              )}
 
-              <button type="submit" disabled={!targetStatus}>
+              <button
+                type="submit"
+                className="btn-primary"
+                disabled={!targetStatus}
+              >
                 Konfirmasi Pindah Status
               </button>
             </form>
           )}
         </section>
 
-        {/* Bagian 2: Nested Checklist */}
-        <section aria-label="Daftar Persiapan">
-          <div>
-            <h3>Daftar Persiapan</h3>
-            <span>
+        <section className="detail-section" aria-label="Daftar Persiapan">
+          <div className="detail-section-heading">
+            <div>
+              <span className="eyebrow">PERSIAPAN</span>
+              <h3>Daftar Persiapan</h3>
+            </div>
+            <span className="checklist-progress-label">
               {completedChecklistCount} / {totalChecklistCount} selesai (
               {checklistProgressPercent}%)
             </span>
           </div>
 
           <progress
+            className="detail-progress"
             value={completedChecklistCount}
             max={Math.max(totalChecklistCount, 1)}
           />
@@ -361,9 +406,9 @@ export function ApplicationDetailModal({
           {application.checklist.length === 0 ? (
             <p>Belum ada item checklist persiapan.</p>
           ) : (
-            <ul>
+            <ul className="checklist-list">
               {application.checklist.map((item) => (
-                <li key={item.id}>
+                <li className="checklist-item" key={item.id}>
                   <label>
                     <input
                       type="checkbox"
@@ -374,6 +419,7 @@ export function ApplicationDetailModal({
                   </label>
                   <button
                     type="button"
+                    className="btn-icon-subtle checklist-remove"
                     aria-label={`Hapus ${item.text}`}
                     onClick={() => handleDeleteChecklist(item.id)}
                   >
@@ -384,44 +430,51 @@ export function ApplicationDetailModal({
             </ul>
           )}
 
-          <form onSubmit={handleAddChecklist}>
+          <form className="detail-inline-form" onSubmit={handleAddChecklist}>
             <input
+              className="detail-input"
               type="text"
               placeholder="Tambah tugas persiapan baru..."
               value={newChecklistText}
               onChange={(e) => setNewChecklistText(e.target.value)}
             />
-            <button type="submit">Tambah</button>
+            <button type="submit" className="btn-secondary">Tambah</button>
           </form>
         </section>
 
-        {/* Bagian 3: Interview Prep Timer */}
-        <InterviewPrepTimer
-          role={application.role}
-          company={application.company}
-        />
+        <div className="detail-section detail-timer-section">
+          <InterviewPrepTimer
+            role={application.role}
+            company={application.company}
+          />
+        </div>
 
-        {/* Bagian 4: Riwayat Aktivitas */}
-        <section aria-label="Riwayat Aktivitas">
-          <h3>Riwayat Aktivitas</h3>
+        <section className="detail-section" aria-label="Riwayat Aktivitas">
+          <div className="detail-section-heading">
+            <div>
+              <span className="eyebrow">CATATAN</span>
+              <h3>Riwayat Aktivitas</h3>
+            </div>
+          </div>
 
-          <form onSubmit={handleAddManualNote}>
+          <form className="detail-inline-form" onSubmit={handleAddManualNote}>
             <input
+              className="detail-input"
               type="text"
               placeholder="Tulis catatan manual (misal: hasil follow-up HRD)..."
               value={manualNote}
               onChange={(e) => setManualNote(e.target.value)}
             />
-            <button type="submit">Simpan Catatan</button>
+            <button type="submit" className="btn-secondary">Simpan Catatan</button>
           </form>
 
           {application.activityLogs.length === 0 ? (
             <p>Belum ada riwayat aktivitas.</p>
           ) : (
-            <ul>
+            <ul className="activity-log-list">
               {application.activityLogs.map((log) => (
-                <li key={log.id}>
-                  <small>
+                <li className="activity-log-entry" key={log.id}>
+                  <small className="activity-log-date">
                     {new Date(log.timestamp).toLocaleString("id-ID")}
                   </small>{" "}
                   — <span>{log.message}</span>
@@ -430,7 +483,7 @@ export function ApplicationDetailModal({
             </ul>
           )}
         </section>
-      </div>
+      </section>
     </div>
   );
 }
