@@ -1,17 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import { AlertTriangle, Plus } from "lucide-react";
-import type { Application } from "./types";
+import type { Application, JobListing, WorkMode } from "./types";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { findInterviewConflicts } from "./utils/conflictUtils";
 import { shiftDateBackwardDays } from "./utils/ghostingUtils";
+import { hasDuplicateApplication } from "./utils/skillMatchUtils";
+import type { JobDataSource } from "./services/jobService";
 import { WarRoomPipeline } from "./components/WarRoomPipeline";
 import { UndoToast } from "./components/UndoToast";
 import { JobExplorer } from "./components/JobExplorer";
 import { SkillProfileSidebar } from "./components/SkillProfileSidebar";
 import { ManualApplicationModal } from "./components/ManualApplicationModal";
-import { hasDuplicateApplication } from "./utils/skillMatchUtils";
-import type { JobListing, WorkMode } from "./types";
-import type { JobDataSource } from "./services/jobService";
+import { StatsDashboard } from "./components/StatsDashboard";
+import { OfferComparator } from "./components/OfferComparator";
+import { ApplicationDetailModal } from "./components/ApplicationDetailModal";
 
 type ActiveTab = "explorer" | "pipeline" | "comparator";
 
@@ -95,16 +97,23 @@ export function App() {
       requiredSkills: [...job.tags],
       lastUpdatedAt: now,
       checklist: [],
-      activityLogs: [{
-        id: crypto.randomUUID(),
-        timestamp: now,
-        message: "Disimpan ke Wishlist dari Eksplorasi Lowongan.",
-      }],
+      activityLogs: [
+        {
+          id: crypto.randomUUID(),
+          timestamp: now,
+          message: "Disimpan ke Wishlist dari Eksplorasi Lowongan.",
+        },
+      ],
     });
   };
 
   const handleAddSkill = (skill: string): boolean => {
-    if (kaptenSkills.some((item) => item.trim().toLocaleLowerCase() === skill.trim().toLocaleLowerCase())) {
+    if (
+      kaptenSkills.some(
+        (item) =>
+          item.trim().toLocaleLowerCase() === skill.trim().toLocaleLowerCase()
+      )
+    ) {
       return false;
     }
     setKaptenSkills((prev) => [...prev, skill.trim()]);
@@ -250,7 +259,16 @@ export function App() {
           </div>
         )}
 
-        {/* Slot Anggota 3: <StatsDashboard applications={applications} /> */}
+        <StatsDashboard
+          applications={applications}
+          onSelectFilterStatus={(status) => {
+            if (status === "OFFER") {
+              setActiveTab("comparator");
+            } else {
+              setActiveTab("pipeline");
+            }
+          }}
+        />
 
         {activeTab === "explorer" && (
           <div className="explorer-layout">
@@ -283,13 +301,10 @@ export function App() {
         )}
 
         {activeTab === "comparator" && (
-          <section className="panel">
-            <h2>Offer Comparator</h2>
-            <p className="muted-text">
-              Slot komponen Anggota 3 (OfferComparator). Total offer siap
-              dibandingkan: {offerCount}.
-            </p>
-          </section>
+          <OfferComparator
+            applications={applications}
+            kaptenSkills={kaptenSkills}
+          />
         )}
 
         {isManualModalOpen && (
@@ -301,40 +316,12 @@ export function App() {
         )}
 
         {selectedApplication && (
-          <div className="modal-backdrop">
-            <div className="modal-card">
-              <h3>
-                Detail Lamaran: {selectedApplication.role} &mdash;{" "}
-                {selectedApplication.company}
-              </h3>
-              <p className="muted-text">
-                Slot komponen Anggota 3 (ApplicationDetailModal &amp;
-                InterviewPrepTimer). Status saat ini:{" "}
-                <strong>{selectedApplication.status}</strong>.
-              </p>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={() =>
-                    handleUpdateApplication({
-                      ...selectedApplication,
-                      lastUpdatedAt: new Date().toISOString(),
-                    })
-                  }
-                >
-                  Refresh Timestamp
-                </button>
-                <button
-                  type="button"
-                  className="btn-primary"
-                  onClick={() => setSelectedApplicationId(null)}
-                >
-                  Tutup
-                </button>
-              </div>
-            </div>
-          </div>
+          <ApplicationDetailModal
+            application={selectedApplication}
+            onClose={() => setSelectedApplicationId(null)}
+            onUpdateApplication={handleUpdateApplication}
+            onDeleteApplication={handleDeleteApplication}
+          />
         )}
       </main>
 
